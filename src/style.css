@@ -1,0 +1,16 @@
+.link {
+  display: block;
+}
+
+textarea {
+  width: 75%;
+  height: 200px;
+  resize: none;
+  /* margin-top: 12px;
+  margin-bottom: 12px; */
+}
+
+button {
+  width: 100px;
+  height: 40px;
+}
