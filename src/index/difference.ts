@@ -1,7 +1,6 @@
 import { type LoadedNote, type NotesWithTime, NoteType } from "./types.js";
-import { loadSimaiData } from "./loadSimaiData.js";
 
-function calculateDifference(loadedNotes: LoadedNote[]) {
+export function calculateDifference(loadedNotes: LoadedNote[]) {
     console.log(loadedNotes);
     const notesWithTime: NotesWithTime[] = [];
     let noteCount = 0;
@@ -102,33 +101,3 @@ function calculateDifference(loadedNotes: LoadedNote[]) {
     - ノーツが来る実際の時刻（秒）
     - 上２つの時刻の差分（ミリ秒）
 */
-
-export class Main {
-    private button: HTMLButtonElement;
-    
-    constructor() {
-       this.button = document.querySelector('button')!;
-       this.button.addEventListener('click', () => this.onClick());
-       // debug: auto click
-       this.onClick();
-    }
-
-    private onClick() {
-        const textarea = document.querySelector('textarea')!;
-        const rawData = textarea.value;
-        // preprocess data: remove newlines and spaces
-        const data = rawData
-            .replace(/(\r)?\n/g, '')
-            .replace(/\s+/g, '');
-        const notes = loadSimaiData(data);
-        const differences = calculateDifference(notes);
-        differences.forEach((note) => {
-            console.log(`NoteIndex: ${note.index}`);
-            console.log(data.slice(note.index, note.index + note.eachNote.length));
-        });
-        console.log("clicked");
-        console.log(notes);
-        console.log(differences);
-    }
-}
-
