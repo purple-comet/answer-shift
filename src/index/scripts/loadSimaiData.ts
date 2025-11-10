@@ -12,7 +12,7 @@ export function loadSimaiData (data: string) {
     // bpmMatch[0]: whole match
     // bpmMatch[1]: bpm value
     // bpmMatch[2]: notes under this bpm
-    const bpmRegex = /\((\d+)\)([^(]+)/g;
+    const bpmRegex = /\((\d+(?:\.\d+)?)\)([^(]+)/g;
     for (const bpmMatch of data.matchAll(bpmRegex)) {
         console.log(bpmMatch)
         const bpmIndex = bpmMatch.index!;
@@ -24,7 +24,7 @@ export function loadSimaiData (data: string) {
         // beatMatch[1]: notes before beat change
         // beatMatch[2]: beat value
         // beatMatch[3]: notes after beat change
-        const beatRegex = /([^){]*)\{(\d+)\}([^{]+)/g;
+        const beatRegex = /([^){]*)\{(\d+(?:\.\d+)?)\}([^{]+)/g;
         for (const beatMatch of bpmNotes.matchAll(beatRegex)) {
             console.log(beatMatch)
             const beatIndex = beatMatch.index!;
@@ -36,7 +36,6 @@ export function loadSimaiData (data: string) {
                         bpm: Number(bpmMatch[1]),
                         beat: currentBeat,
                         note: match[1],
-                        // TODO: simaiデータ全体で何文字目かのインデックスを計算する（今のロジックは間違い）
                         index: bpmIndex + bpmChangeStringLength + beatIndex + beatChangeStringLength + Number(match.index),
                     });
                 }
@@ -50,7 +49,6 @@ export function loadSimaiData (data: string) {
                     bpm: Number(bpmMatch[1]),
                     beat: Number(beatMatch[2]),
                     note: match[1],
-                    // TODO: simaiデータ全体で何文字目かのインデックスを計算する（今のロジックは間違い）
                     index: bpmIndex + bpmChangeStringLength + beatIndex + beatChangeStringLength + Number(match.index),
                 });
             }

@@ -1,5 +1,6 @@
 import './style.css'
-import { main } from './scripts/mainScript.js'
+import { main } from './scripts/main.js'
+
 const sampleSimai = `(158)
 {24}4,5,4,5,4,5,4,5>6[24:23],4,5,4,5,{1}4b,{2}2-5[4:1],6-1[4:1],{1}2q5[4:3],6<3[2:1],
 4q1[2:1],8q5[2:1],4q5[4:3],6<3[2:1],{4}4h[4:3],5,5,5-8[4:1],,,{16}1,8,1,,{4}27,
@@ -48,18 +49,47 @@ const sampleSimai = `(158)
 4<8[4:1]b,8>4[4:1]b,4,{8}6,6,,24,,57,,18,{4}2-5[8:1]/7,
 2/6-1[8:1],6/3-8[8:1],3/7-4[8:1],7/1-5[8:1],{8}1/8-4[8:1],8,8/2-5[8:1],2,2/6-1[8:1],6,62,2,
 28,{16}6,5,6,,71,,3,4,3,,28,,6,5,6,,4,5,3,6,2,7,1-5[8:1],5,3,7,{4}1b>8[1:1],{1}B6/B7/E7f,,,,E` 
+
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="container">
     <h2 class="title">曲とアンサー音のズレ計算ツール</h2>
     <p>simai形式の譜面データから、曲とノーツのアンサー音とのズレを計算します。</p>
-    <a class="link" href="https://w.atwiki.jp/simai/pages/32.html">ST譜面（simai wikiへ）</a>
-    <a class="link" href="https://w.atwiki.jp/simai/pages/808.html">DX譜面（simai wikiへ）</a>
-    <textarea placeholder="simai形式の譜面データをここに貼り付けてください">${sampleSimai}</textarea><br/>
-    <button>計算</button>
+    <a class="link" href="https://w.atwiki.jp/simai/pages/32.html" target="_blank">ST譜面（simai wikiへ）</a>
+    <a class="link" href="https://w.atwiki.jp/simai/pages/808.html" target="_blank">DX譜面（simai wikiへ）</a>
+    <div id="mode-switcher">
+      <input type="radio" id="mode-edit" name="mode" value="edit" checked/>
+      <label for="mode-edit">編集モード</label>
+      <input type="radio" id="mode-select" name="mode" value="select"/>
+      <label for="mode-select">選択モード</label>
+    </div>
+    <textarea id="input" placeholder="simai形式の譜面データをここに貼り付けてください">${sampleSimai}</textarea><br/>
+    <input type="checkbox" id="break" />
+    <label for="break">ブレイクのみ表示</label>
+    <table>
+      <thead>
+        <tr>
+          <th>ノーツ数</th>
+          <th>simai書式</th>
+          <th>判定誤差(f)</th>
+        </tr>
+      </thead>
+      <tbody id="res-body">
+        <tr>
+          <td>--</td>
+          <td>--</td>
+          <td>--</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 `
 
 main(
-  document.querySelector('button')!,
-  document.querySelector('textarea')!
+  {
+    edit: document.querySelector('input#mode-edit')!,
+    select: document.querySelector('input#mode-select')!,
+  },
+  document.querySelector('textarea#input')!,
+  document.querySelector('tbody#res-body')!,
+  document.querySelector('input#break')!,
 )

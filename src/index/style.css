@@ -13,4 +13,11 @@ textarea {
 button {
   width: 100px;
   height: 40px;
+  display: block;
+}
+
+textarea[readonly] {
+  background-color: #f5f5f5;
+  cursor: text;
+  border: 1px solid #ddd;
 }
