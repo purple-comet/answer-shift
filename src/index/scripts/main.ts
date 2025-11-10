@@ -2,6 +2,7 @@ import { loadSimaiData } from "./loadSimaiData.js";
 import { calculateDifference } from "./calculateDifference.js";
 import { NoteType, type NotesWithTime } from "../types.js";
 import { cleanUpInput } from "./utils.js";
+import { exportCsv } from "./exportCsv.js";
 
 let difference: NotesWithTime[] = [];
 
@@ -59,11 +60,13 @@ function showResult(textarea: HTMLTextAreaElement, tableBody: HTMLTableSectionEl
     tableBody.innerHTML = bodyHtml;
 
 }
+
 export function main(
     radios: { edit: HTMLInputElement; select: HTMLInputElement }, 
     textarea: HTMLTextAreaElement,
     tableBody: HTMLTableSectionElement,
     breakCheckbox: HTMLInputElement,
+    csvButton: HTMLButtonElement,
 ) {
     // モード切り替え
     radios.edit.addEventListener('change', () => {
@@ -86,6 +89,10 @@ export function main(
     // クリックで選択範囲のノートを抽出して表示
     textarea.addEventListener('click', () => showResult(textarea, tableBody, breakCheckbox));
     breakCheckbox.addEventListener('change', () => showResult(textarea, tableBody, breakCheckbox));
+    
+    // CSV出力機能
+    csvButton.addEventListener('click', () => exportCsv(tableBody));
+    
     // debug: auto click
     loadSimaiAndCalcDiff(textarea);
 }

@@ -52,8 +52,8 @@ const sampleSimai = `(158)
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="container">
-    <h2 class="title">曲とアンサー音のズレ計算ツール</h2>
-    <p>simai形式の譜面データから、曲とノーツのアンサー音とのズレを計算します。</p>
+    <h2 class="title">アンサー音ズレ計算ツール</h2>
+    <p>simai形式の譜面データから、曲とアンサー音とのズレを計算します。</p>
     <a class="link" href="https://w.atwiki.jp/simai/pages/32.html" target="_blank">ST譜面（simai wikiへ）</a>
     <a class="link" href="https://w.atwiki.jp/simai/pages/808.html" target="_blank">DX譜面（simai wikiへ）</a>
     <div id="mode-switcher">
@@ -65,6 +65,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <textarea id="input" placeholder="simai形式の譜面データをここに貼り付けてください">${sampleSimai}</textarea><br/>
     <input type="checkbox" id="break" />
     <label for="break">ブレイクのみ表示</label>
+    <button id="csv-export">CSV出力</button>
     <table>
       <thead>
         <tr>
@@ -92,4 +93,5 @@ main(
   document.querySelector('textarea#input')!,
   document.querySelector('tbody#res-body')!,
   document.querySelector('input#break')!,
+  document.querySelector('button#csv-export')!,
 )
