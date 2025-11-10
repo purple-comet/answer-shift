@@ -1,44 +1,57 @@
 import { type LoadedNote } from "./types.js";
 export function loadSimaiData (data: string) {
-    // preprocess data: remove newlines and spaces
-    const onelineData = data
-    .replace(/(\r)?\n/g, '')
-    .replace(/\s+/g, '');
-    const bpmRegex = /\((\d+)\)([^(]+)/g;
     const notesArray: LoadedNote[] = [];
 
+    // bpm変化前後で音符の長さを保持するための変数
     let currentBeat = -1;
+
+    // bpm変化・音符の長さに関する表記の長さを記録、index計算に使用
+    let bpmChangeStringLength = 0;
+    let beatChangeStringLength = 0;
     // extract notes grouped by BPM
-    for (const bpmMatch of onelineData.matchAll(bpmRegex)) {
+    // bpmMatch[0]: whole match
+    // bpmMatch[1]: bpm value
+    // bpmMatch[2]: notes under this bpm
+    const bpmRegex = /\((\d+)\)([^(]+)/g;
+    for (const bpmMatch of data.matchAll(bpmRegex)) {
         console.log(bpmMatch)
         const bpmIndex = bpmMatch.index!;
-        const rawNotes = bpmMatch[2];
-        const beatRegex = /([^){]*)\{(\d+)\}([^{]+)/g;
-        // extract notes grouped by beat
+        const bpmNotes = bpmMatch[2];
+        bpmChangeStringLength = bpmMatch[1].length + 2; // +2 for parentheses
         
-        for (const beatMatch of rawNotes.matchAll(beatRegex)) {
+        // extract notes grouped by beat
+        // beatMatch[0]: whole match
+        // beatMatch[1]: notes before beat change
+        // beatMatch[2]: beat value
+        // beatMatch[3]: notes after beat change
+        const beatRegex = /([^){]*)\{(\d+)\}([^{]+)/g;
+        for (const beatMatch of bpmNotes.matchAll(beatRegex)) {
             console.log(beatMatch)
             const beatIndex = beatMatch.index!;
+            // handle notes before beat change
             if (currentBeat !== -1 && beatMatch[1].length > 0) {
-                for (const [index, note] of beatMatch[1].split(',').slice(0, -1).entries()) {
+                for (const match of beatMatch[1].matchAll(/([^,]*),/g)) {
+                    console.log("bpmIndex:", bpmIndex, "beatIndex:", beatIndex, "match.index:", match.index);
                     notesArray.push({
                         bpm: Number(bpmMatch[1]),
                         beat: currentBeat,
-                        note: note,
+                        note: match[1],
                         // TODO: simaiデータ全体で何文字目かのインデックスを計算する（今のロジックは間違い）
-                        index: bpmIndex + beatIndex + Number(index),
+                        index: bpmIndex + bpmChangeStringLength + beatIndex + beatChangeStringLength + Number(match.index),
                     });
                 }
             }
             currentBeat = Number(beatMatch[2]);
-            for (const [index, note] of beatMatch[3].split(',').slice(0, -1).entries())
-            {
+            beatChangeStringLength = beatMatch[2].length + 2; // +2 for braces
+            // handle notes after beat change
+            for (const match of beatMatch[3].matchAll(/([^,]*),/g)){
+                console.log("bpmIndex:", bpmIndex, "beatIndex:", beatIndex, "match.index:", match.index);
                 notesArray.push({
                     bpm: Number(bpmMatch[1]),
                     beat: Number(beatMatch[2]),
-                    note: note,
+                    note: match[1],
                     // TODO: simaiデータ全体で何文字目かのインデックスを計算する（今のロジックは間違い）
-                    index: bpmIndex + beatIndex + Number(index),
+                    index: bpmIndex + bpmChangeStringLength + beatIndex + beatChangeStringLength + Number(match.index),
                 });
             }
         }
