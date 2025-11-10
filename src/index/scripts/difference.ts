@@ -1,4 +1,4 @@
-import { type LoadedNote, type NotesWithTime, NoteType } from "./types.js";
+import { type LoadedNote, type NotesWithTime, NoteType } from "../types.js";
 
 export function calculateDifference(loadedNotes: LoadedNote[]) {
     console.log(loadedNotes);

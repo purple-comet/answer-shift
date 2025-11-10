@@ -1,4 +1,4 @@
-import { type LoadedNote } from "./types.js";
+import { type LoadedNote } from "../types.js";
 export function loadSimaiData (data: string) {
     const notesArray: LoadedNote[] = [];
 

@@ -1,5 +1,5 @@
 import './style.css'
-import { main } from './mainScript.js'
+import { main } from './scripts/mainScript.js'
 const sampleSimai = `(158)
 {24}4,5,4,5,4,5,4,5>6[24:23],4,5,4,5,{1}4b,{2}2-5[4:1],6-1[4:1],{1}2q5[4:3],6<3[2:1],
 4q1[2:1],8q5[2:1],4q5[4:3],6<3[2:1],{4}4h[4:3],5,5,5-8[4:1],,,{16}1,8,1,,{4}27,
