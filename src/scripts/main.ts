@@ -33,7 +33,7 @@ function showResult(
     const foundNotes: NotesWithTime[] = [];
     for (let i = 0; i < difference.length; i++) {
         const note = difference[i];
-        const nextNote = difference[i + 1];
+        const nextNote = breakCheckbox.checked ? difference.find((n) => n.noteType.includes(NoteType.break) && n.index > note.index) : difference[i + 1];
         if (breakCheckbox.checked && !note.noteType.includes(NoteType.break)) continue;
         if (foundNotes.some((n) => n.trueTimeFrame === note.trueTimeFrame)) continue;
 
@@ -61,7 +61,13 @@ function showResult(
         </tr>
         `;
     }
-    tableBody.innerHTML = bodyHtml;
+    tableBody.innerHTML = bodyHtml !== '' ? bodyHtml : `
+    <tr>
+        <td>--</td>
+        <td>--</td>
+        <td>--</td>
+    </tr>
+    `;
 
 }
 
@@ -89,6 +95,7 @@ export function main(
         if (radios.select.checked) {
             textarea.readOnly = true;
             loadSimaiAndCalcDiff(textarea, offsets);
+            showResult(textarea, tableBody, breakCheckbox);
         }
     });
     // テキストエリアの入力検知して計算
@@ -98,13 +105,16 @@ export function main(
         showResult(textarea, tableBody, breakCheckbox);
     });
     // クリックで選択範囲のノートを抽出して表示
-    textarea.addEventListener('click', () => showResult(textarea, tableBody, breakCheckbox));
-    breakCheckbox.addEventListener('change', () => showResult(textarea, tableBody, breakCheckbox));
+    textarea.addEventListener('click', () => {
+        loadSimaiAndCalcDiff(textarea, offsets);
+        showResult(textarea, tableBody, breakCheckbox)
+    });
+    breakCheckbox.addEventListener('change', () => {
+        loadSimaiAndCalcDiff(textarea, offsets);
+        showResult(textarea, tableBody, breakCheckbox);
+    });
     
     // CSV出力機能
     csvButton.addEventListener('click', () => exportCsv(tableBody));
-    
-    // debug: auto click
-    loadSimaiAndCalcDiff(textarea, offsets);
 }
 
