@@ -100,7 +100,6 @@ export function main(
     });
     // テキストエリアの入力検知して計算
     textarea.addEventListener('keyup', () => {
-        console.log("keyup detected");
         loadSimaiAndCalcDiff(textarea, offsets);
         showResult(textarea, tableBody, breakCheckbox);
     });

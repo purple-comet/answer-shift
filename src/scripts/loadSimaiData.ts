@@ -14,7 +14,6 @@ export function loadSimaiData (data: string) {
     // bpmMatch[2]: notes under this bpm
     const bpmRegex = /\((\d+(?:\.\d+)?)\)([^(]+)/g;
     for (const bpmMatch of data.matchAll(bpmRegex)) {
-        console.log(bpmMatch)
         const bpmIndex = bpmMatch.index!;
         const bpmNotes = bpmMatch[2];
         bpmChangeStringLength = bpmMatch[1].length + 2; // +2 for parentheses
@@ -26,12 +25,10 @@ export function loadSimaiData (data: string) {
         // beatMatch[3]: notes after beat change
         const beatRegex = /([^){]*)\{(\d+(?:\.\d+)?)\}([^{]+)/g;
         for (const beatMatch of bpmNotes.matchAll(beatRegex)) {
-            console.log(beatMatch)
             const beatIndex = beatMatch.index!;
             // handle notes before beat change
             if (currentBeat !== -1 && beatMatch[1].length > 0) {
                 for (const match of beatMatch[1].matchAll(/([^,]*),/g)) {
-                    console.log("bpmIndex:", bpmIndex, "beatIndex:", beatIndex, "match.index:", match.index);
                     notesArray.push({
                         bpm: Number(bpmMatch[1]),
                         beat: currentBeat,
@@ -44,7 +41,6 @@ export function loadSimaiData (data: string) {
             beatChangeStringLength = beatMatch[2].length + 2; // +2 for braces
             // handle notes after beat change
             for (const match of beatMatch[3].matchAll(/([^,]*),/g)){
-                console.log("bpmIndex:", bpmIndex, "beatIndex:", beatIndex, "match.index:", match.index);
                 notesArray.push({
                     bpm: Number(bpmMatch[1]),
                     beat: Number(beatMatch[2]),
