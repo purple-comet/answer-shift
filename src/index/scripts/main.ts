@@ -6,22 +6,26 @@ import { exportCsv } from "./exportCsv.js";
 
 let difference: NotesWithTime[] = [];
 
-function loadSimaiAndCalcDiff(textarea: HTMLTextAreaElement) {
-    const rawData = textarea.value;
+function loadSimaiAndCalcDiff(
+    textarea: HTMLTextAreaElement,
+     offsets:{ bpm: HTMLInputElement; count: HTMLInputElement; a: HTMLInputElement }
+) {
     // preprocess data: remove newlines and spaces
-    const data = cleanUpInput(rawData);
+    const data = cleanUpInput(textarea.value);
     const notes = loadSimaiData(data);
-    difference = calculateDifference(notes);
-    difference.forEach((note) => {
-        console.log(`NoteIndex: ${note.index}`);
-        console.log(data.slice(note.index, note.index + note.eachNote.length));
-    });
-    console.log("clicked");
-    console.log(notes);
-    console.log(difference);
+    console.log("Offset inputs:", offsets);
+    const offset = Number(offsets.a.value) + Number(offsets.count.value) * (3600 / Number(offsets.bpm.value));
+    console.log("Calculated offset:", offset);
+    difference = calculateDifference(notes, offset);
+    console.log("loaded notes:", notes);
+    console.log("calculated difference:", difference);
 }
 
-function showResult(textarea: HTMLTextAreaElement, tableBody: HTMLTableSectionElement, breakCheckbox: HTMLInputElement) {
+function showResult(
+    textarea: HTMLTextAreaElement, 
+    tableBody: HTMLTableSectionElement, 
+    breakCheckbox: HTMLInputElement
+) {
     const processedSectionStart = cleanUpInput(textarea.value.slice(0, textarea.selectionStart)).length;
     const processedSectionEnd = cleanUpInput(textarea.value.slice(0, textarea.selectionEnd)).length;
     console.log("selection in processed data:", processedSectionStart, processedSectionEnd);
@@ -63,11 +67,18 @@ function showResult(textarea: HTMLTextAreaElement, tableBody: HTMLTableSectionEl
 
 export function main(
     radios: { edit: HTMLInputElement; select: HTMLInputElement }, 
+    offsets: { bpm: HTMLInputElement; count: HTMLInputElement; a: HTMLInputElement },
     textarea: HTMLTextAreaElement,
     tableBody: HTMLTableSectionElement,
     breakCheckbox: HTMLInputElement,
     csvButton: HTMLButtonElement,
 ) {
+    for (const input of [offsets.bpm, offsets.count, offsets.a]) {
+        input.addEventListener('input', () => {
+            loadSimaiAndCalcDiff(textarea, offsets);
+            showResult(textarea, tableBody, breakCheckbox);
+        });
+    }
     // モード切り替え
     radios.edit.addEventListener('change', () => {
         if (radios.edit.checked) {
@@ -77,13 +88,13 @@ export function main(
     radios.select.addEventListener('change', () => {
         if (radios.select.checked) {
             textarea.readOnly = true;
-            loadSimaiAndCalcDiff(textarea);
+            loadSimaiAndCalcDiff(textarea, offsets);
         }
     });
     // テキストエリアの入力検知して計算
     textarea.addEventListener('keyup', () => {
         console.log("keyup detected");
-        loadSimaiAndCalcDiff(textarea);
+        loadSimaiAndCalcDiff(textarea, offsets);
         showResult(textarea, tableBody, breakCheckbox);
     });
     // クリックで選択範囲のノートを抽出して表示
@@ -94,6 +105,6 @@ export function main(
     csvButton.addEventListener('click', () => exportCsv(tableBody));
     
     // debug: auto click
-    loadSimaiAndCalcDiff(textarea);
+    loadSimaiAndCalcDiff(textarea, offsets);
 }
 

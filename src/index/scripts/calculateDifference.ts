@@ -1,10 +1,10 @@
 import { type LoadedNote, type NotesWithTime, NoteType } from "../types.js";
 
-export function calculateDifference(loadedNotes: LoadedNote[]) {
+export function calculateDifference(loadedNotes: LoadedNote[], offset: number) {
     console.log(loadedNotes);
     const notesWithTime: NotesWithTime[] = [];
     let noteCount = 0;
-    let currentFrame = 0;
+    let currentFrame = offset;
 
     for (const noteItem of loadedNotes) {
 
