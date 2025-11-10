@@ -40,7 +40,7 @@ function showResult(
         let isIndexInRange: boolean = false;
         if (processedSectionStart === processedSectionEnd) 
         {
-            isIndexInRange = note.index <= processedSectionStart && processedSectionStart < nextNote?.index;
+            isIndexInRange = note.index <= processedSectionStart && processedSectionStart <= (nextNote?.index ?? Infinity);
         } 
         else 
         {
