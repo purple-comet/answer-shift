@@ -1,23 +1,25 @@
-export interface LoadedNotes {
+export interface LoadedNote {
     bpm: number;
-    notes: {
-        beat: number;
-        notes: string[];
-    }[];
-    rawNotes: string;
+    beat: number;
+    note: string;
+    index: number;
  }
 
-export interface NotesWithTime {
+export interface NotesWithTime extends LoadedNote {
     noteCount: number;
     noteType: typeof NoteType[keyof typeof NoteType][];
-    timeSec: number;
-    timeFrame: number; // maybe int
-    differenceMs: number;
+    eachNote: string;
+    trueTimeFrame: number;
+    actualTimeFrame: number; // maybe int
     differenceFrame: number;
+    trueTimeSec: number;
+    actualTimeSec: number;
+    differenceMs: number;
  }
 
 export const NoteType = {
     tap: 'tap',
+    each: 'each',
     hold: 'hold',
     slide: 'slide',
     break: 'break',
