@@ -99,15 +99,11 @@ export function main(
         }
     });
     // テキストエリアの入力検知して計算
-    textarea.addEventListener('keyup', () => {
+    textarea.addEventListener('selectionchange', () => {
         loadSimaiAndCalcDiff(textarea, offsets);
         showResult(textarea, tableBody, breakCheckbox);
     });
-    // クリックで選択範囲のノートを抽出して表示
-    textarea.addEventListener('click', () => {
-        loadSimaiAndCalcDiff(textarea, offsets);
-        showResult(textarea, tableBody, breakCheckbox)
-    });
+
     breakCheckbox.addEventListener('change', () => {
         loadSimaiAndCalcDiff(textarea, offsets);
         showResult(textarea, tableBody, breakCheckbox);
@@ -115,24 +111,5 @@ export function main(
     
     // CSV出力機能
     csvButton.addEventListener('click', () => exportCsv(tableBody));
-
-    // debug
-    const events = [
-    'click', 'touchstart', 'touchend', 'touchmove',
-    'select', 'selectionchange', 'focus', 'blur',
-    'input', 'change', 'keyup'
-    ] as const
-
-    events.forEach(event => {
-    const target = event === 'selectionchange' ? document : textarea
-    
-    target.addEventListener(event as any, () => {
-        console.warn(`[${event}]`, {
-        start: textarea.selectionStart,
-        end: textarea.selectionEnd,
-        activeElement: document.activeElement === textarea
-        })
-    })
-    })
 }
 
