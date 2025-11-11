@@ -8,7 +8,7 @@ let difference: NotesWithTime[] = [];
 
 function loadSimaiAndCalcDiff(
     textarea: HTMLTextAreaElement,
-     offsets:{ bpm: HTMLInputElement; count: HTMLInputElement; a: HTMLInputElement }
+    offsets:{ bpm: HTMLInputElement; count: HTMLInputElement; a: HTMLInputElement }
 ) {
     // preprocess data: remove newlines and spaces
     const data = cleanUpInput(textarea.value);

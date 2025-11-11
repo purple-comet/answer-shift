@@ -40,6 +40,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <textarea id="input" placeholder="simai形式の譜面データをここに貼り付けてください"></textarea><br/>
    
     <h3>計算結果</h3>
+    <p>判定誤差がマイナスなら早く叩く必要があり、プラスなら遅く叩く必要があります。</p>
     <input type="checkbox" id="break" />
     <label for="break">ブレイクのみ表示</label>
     <button id="csv-export">CSV出力</button>
