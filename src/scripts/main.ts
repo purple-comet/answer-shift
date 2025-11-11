@@ -126,7 +126,7 @@ export function main(
     events.forEach(event => {
     const target = event === 'selectionchange' ? document : textarea
     
-    target.addEventListener(event as any, (e) => {
+    target.addEventListener(event as any, () => {
         console.warn(`[${event}]`, {
         start: textarea.selectionStart,
         end: textarea.selectionEnd,
