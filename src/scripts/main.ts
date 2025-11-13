@@ -54,7 +54,7 @@ function showResult(
     let bodyHtml = ''; 
     for (const note of foundNotes) {
         bodyHtml += `
-        <tr>
+        <tr class="${note.noteType.includes(NoteType.break) ? 'break' : ''}">
             <td>${note.noteCount}</td>
             <td>${note.eachNote}</td>
             <td>${note.differenceFrame === 0 ? '  ' : note.differenceFrame < 0 ? '- ' : '+ '}${(Math.round(1000 * Math.abs(note.differenceFrame)) / 1000).toFixed(3)}</td>
