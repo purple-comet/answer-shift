@@ -8,9 +8,15 @@ export function calculateDifference(loadedNotes: LoadedNote[], offset: number) {
     for (const noteItem of loadedNotes) {
 
         // 時刻情報を計算
+        // ノーツが置かれてる実際のフレーム数は、真のフレーム数の小数点切り上げしたものとして計算
+        // プレイヤーの認識としては判定の中心は+0.5fとなっていそう？なので、差分計算時に-0.5fして幅を-0.5f〜+0.5fに調整
+        // 新計算式
         const trueTimeFrame = currentFrame
-        const actualTimeFrame = Math.round(trueTimeFrame);
-        const differenceFrame = actualTimeFrame - trueTimeFrame;
+        const actualTimeFrame = Math.ceil(trueTimeFrame);
+        const differenceFrame = actualTimeFrame - trueTimeFrame - 0.5;
+        // 旧計算式
+        // const actualTimeFrame = Math.round(currentFrame);
+        // const differenceFrame = actualTimeFrame - currentFrame;
         // 空ノーツを処理（タイミング合わせのためだけのカンマ）
         if (noteItem.note === "") {
             // do nothing
