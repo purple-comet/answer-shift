@@ -8,15 +8,16 @@ let difference: NotesWithTime[] = [];
 
 function loadSimaiAndCalcDiff(
     textarea: HTMLTextAreaElement,
-    offsets:{ bpm: HTMLInputElement; count: HTMLInputElement; a: HTMLInputElement }
+    offsets:{ bpm: HTMLInputElement; count: HTMLInputElement; center: HTMLInputElement }
 ) {
     // preprocess data: remove newlines and spaces
     const data = cleanUpInput(textarea.value);
     const notes = loadSimaiData(data);
     console.log("Offset inputs:", offsets);
-    const offset = Number(offsets.a.value) + Number(offsets.count.value) * (3600 / Number(offsets.bpm.value));
-    console.log("Calculated offset:", offset);
-    difference = calculateDifference(notes, offset);
+    const preOffset = Number(offsets.count.value) * (3600 / Number(offsets.bpm.value));
+    console.log("Calculated offset:", preOffset);
+    const centerOffset = Number(offsets.center.value);
+    difference = calculateDifference(notes, preOffset, centerOffset);
     console.log("loaded notes:", notes);
     console.log("calculated difference:", difference);
 }
@@ -73,13 +74,13 @@ function showResult(
 
 export function main(
     radios: { edit: HTMLInputElement; select: HTMLInputElement }, 
-    offsets: { bpm: HTMLInputElement; count: HTMLInputElement; a: HTMLInputElement },
+    offsets: { bpm: HTMLInputElement; count: HTMLInputElement; center: HTMLInputElement },
     textarea: HTMLTextAreaElement,
     tableBody: HTMLTableSectionElement,
     breakCheckbox: HTMLInputElement,
     csvButton: HTMLButtonElement,
 ) {
-    for (const input of [offsets.bpm, offsets.count, offsets.a]) {
+    for (const input of [offsets.bpm, offsets.count, offsets.center]) {
         input.addEventListener('input', () => {
             loadSimaiAndCalcDiff(textarea, offsets);
             showResult(textarea, tableBody, breakCheckbox);

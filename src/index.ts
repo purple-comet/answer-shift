@@ -24,9 +24,11 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <label for="bpm-offset">BPM:</label> <input type="number" id="offset-bpm" value="120" min="1" /><br/>
     <label for="count">個数:</label> <input type="number" id="offset-count" value="0" min="0" />
 
-    <h3>判定Aオフセット</h3>
-    <p>判定Aのオフセットを入力してください。</p>
-    <input type="number" id="offset-a" value="0" step="0.01"/>
+    <h3>判定の中心</h3>
+    <p>あなたが思うこの曲の判定の中心を入力してください。</p>
+    <p>入力する値は判定A調整後の値にしてください。</p>
+    <p>例：+0.1と入力した場合、判定誤差の範囲が-0.4~+0.6として表示されます。</p>
+    <input type="number" id="offset-center" value="0" step="0.01"/>
 
 
     <div id="mode-switcher" style="margin-top: 1em;">
@@ -74,7 +76,7 @@ main(
   {
     bpm: document.querySelector('input#offset-bpm')!,
     count: document.querySelector('input#offset-count')!,
-    a: document.querySelector('input#offset-a')!,
+    center: document.querySelector('input#offset-center')!,
   },
   document.querySelector('textarea#input')!,
   document.querySelector('tbody#res-body')!,

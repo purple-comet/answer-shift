@@ -1,16 +1,16 @@
 import { type LoadedNote, type NotesWithTime, NoteType } from "../types.js";
 
-export function calculateDifference(loadedNotes: LoadedNote[], offset: number) {
+export function calculateDifference(loadedNotes: LoadedNote[], preOffset: number, centerOffset: number) {
     const notesWithTime: NotesWithTime[] = [];
     let noteCount = 0;
-    let currentFrame = offset;
+    let currentFrame = preOffset;
 
     for (const noteItem of loadedNotes) {
 
         // 時刻情報を計算
-        const trueTimeFrame = currentFrame
-        const actualTimeFrame = Math.round(trueTimeFrame);
-        const differenceFrame = actualTimeFrame - trueTimeFrame;
+        const actualTimeFrame = Math.round(currentFrame);
+        const trueTimeFrame = currentFrame;
+        const differenceFrame = actualTimeFrame - trueTimeFrame + centerOffset;
         // 空ノーツを処理（タイミング合わせのためだけのカンマ）
         if (noteItem.note === "") {
             // do nothing
