@@ -55,18 +55,18 @@ function showResult(
     let bodyHtml = ''; 
     for (const note of foundNotes) {
         bodyHtml += `
-        <tr class="${note.noteType.includes(NoteType.break) ? 'break' : ''}">
-            <td>${note.noteCount}</td>
-            <td>${note.eachNote}</td>
-            <td>${note.differenceFrame === 0 ? '  ' : note.differenceFrame < 0 ? '- ' : '+ '}${(Math.round(1000 * Math.abs(note.differenceFrame)) / 1000).toFixed(3)}</td>
+        <tr class=" ${note.noteType.includes(NoteType.break) ? 'bg-red-200 hover:bg-red-300' : 'hover:bg-gray-100'}">
+            <td class="px-4 py-3 text-gray-700">${note.noteCount}</td>
+            <td class="px-4 py-3 text-gray-700 font-mono text-sm">${note.eachNote}</td>
+            <td class="px-4 py-3 text-gray-700">${note.differenceFrame === 0 ? '  ' : note.differenceFrame < 0 ? '- ' : '+ '}${(Math.round(1000 * Math.abs(note.differenceFrame)) / 1000).toFixed(3)}</td>
         </tr>
         `;
     }
     tableBody.innerHTML = bodyHtml !== '' ? bodyHtml : `
-    <tr>
-        <td>--</td>
-        <td>--</td>
-        <td>--</td>
+    <tr class="hover:bg-gray-50">
+        <td class="px-4 py-3 text-gray-700">--</td>
+        <td class="px-4 py-3 text-gray-700">--</td>
+        <td class="px-4 py-3 text-gray-700">--</td>
     </tr>
     `;
 
